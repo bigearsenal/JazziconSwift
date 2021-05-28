@@ -1,0 +1,6 @@
+framework module JazziconSwift {
+  umbrella header "JazziconSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}
