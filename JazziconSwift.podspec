@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JazziconSwift'
-  s.version          = '0.2.0'
+  s.version          = '1.0.0'
   s.summary          = 'Jazzy Identicons written in pure swift.'
 
   s.description      = <<-DESC
