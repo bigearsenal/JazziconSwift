@@ -1,5 +1,5 @@
 //
-//  Tests.swift
+//  JazziconTests.swift
 //  JazziconSwift_Tests
 //
 //  Created by Chung Tran on 28/05/2021.
@@ -8,8 +8,9 @@
 
 import XCTest
 import UIKit
+import JazziconSwift
 
-class Tests: XCTestCase {
+class JazziconTests: XCTestCase {
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -19,17 +20,24 @@ class Tests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.        
-        var hue = CGFloat(0)
-        var saturation = CGFloat(0)
-        var brightness = CGFloat(0)
-        var alpha = CGFloat(0)
-        UIColor.blue.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+    func testUnuniqueIcon() throws {
+        let icon1 = Jazzicon(seed: 1).generateImage(size: 50)
+        let icon2 = Jazzicon(seed: 2).generateImage(size: 50)
         
-        print(hue, brightness, alpha)
+        let data1 = UIImagePNGRepresentation(icon1)
+        let data2 = UIImagePNGRepresentation(icon2)
         
+        XCTAssertNotEqual(data1, data2)
+    }
+    
+    func testUniqueIcon() throws {
+        let icon1 = Jazzicon(seed: 1).generateImage(size: 50)
+        let icon2 = Jazzicon(seed: 1).generateImage(size: 50)
+        
+        let data1 = UIImagePNGRepresentation(icon1)
+        let data2 = UIImagePNGRepresentation(icon2)
+        
+        XCTAssertEqual(data1, data2)
     }
     
     func testPerformanceExample() throws {

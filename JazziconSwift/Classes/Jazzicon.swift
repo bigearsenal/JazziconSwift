@@ -9,13 +9,23 @@ import Foundation
 import GameplayKit
 
 public struct Jazzicon {
-    // MARK: - Constants
-    private static var wobble: CGFloat = 30
+    // MARK: - Properties
+    private var seed: UInt64
+    private var shapeCount: Int
+    
+    // MARK: - Initializers
+    public init(
+        seed: UInt64 = .random(in: 0..<10000000),
+        shapeCount: Int = 4
+    ) {
+        self.seed = seed
+        self.shapeCount = shapeCount
+    }
     
     /// Generate random jazzicon
     /// - Parameter size: size of the image (width = height)
     /// - Returns: an instance of UIImage
-    public static func generate(size: CGFloat, shapeCount: Int = 4, seed: UInt64 = .random(in: 0..<10000000)) -> UIImage {
+    public func generateImage(size: CGFloat) -> UIImage {
         // create generator
         let generator = GKMersenneTwisterRandomSource(seed: seed)
         
@@ -50,77 +60,78 @@ public struct Jazzicon {
 
         return img
     }
+}
+
+// MARK: - Helpers
+private func generateOtherShape(
+    currentContext ctx: CGContext,
+    size: CGFloat,
+    total: Int,
+    i: Int,
+    remainingColors: inout [UIColor],
+    generator: GKMersenneTwisterRandomSource
+) {
+    // preparation
+    ctx.saveGState()
     
-    // MARK: - Helpers
-    private static func generateFirstShape(
-        currentContext ctx: CGContext,
-        size: CGFloat,
-        remainingColors: inout [UIColor],
-        generator: GKMersenneTwisterRandomSource
-    ) {
-        // preparation
-        ctx.saveGState()
-        
-        let rect = CGRect(x: 0, y: 0, width: size, height: size)
-        ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
-        ctx.fill(rect)
-        
-        // finish
-        ctx.restoreGState()
-    }
-    
-    private static func generateOtherShape(
-        currentContext ctx: CGContext,
-        size: CGFloat,
-        total: Int,
-        i: Int,
-        remainingColors: inout [UIColor],
-        generator: GKMersenneTwisterRandomSource
-    ) {
-        // preparation
-        ctx.saveGState()
-        
 //        let center = size / 2
-        let firstRot = generator.nextUniform()
-        let angle = CGFloat.pi * 2 * CGFloat(firstRot)
-        let velocity = size / CGFloat(total) * CGFloat(generator.nextUniform()) + (CGFloat(i) * size / CGFloat(total))
-        
-        let tx = cos(angle) * velocity
-        let ty = sin(angle) * velocity
-        
-        // Third random is a shape rotation on top of all of that.
-        let secondRot = generator.nextUniform()
-        let rot = (firstRot * 360.0) + secondRot * 180.0
-        
-        let fill = generateColor(from: &remainingColors, generator: generator)
-        
-        ctx.translateBy(x: tx, y: ty)
-        ctx.rotate(by: CGFloat(rot))
-        ctx.setFillColor(fill)
-        
-        let rect = CGRect(x: 0, y: 0, width: size, height: size)
-        ctx.fill(rect)
-        
-        // finish
-        ctx.restoreGState()
-    }
+    let firstRot = generator.nextUniform()
+    let angle = CGFloat.pi * 2 * CGFloat(firstRot)
+    let velocity = size / CGFloat(total) * CGFloat(generator.nextUniform()) + (CGFloat(i) * size / CGFloat(total))
     
-    private static func generateColor(
-        from remainingColors: inout [UIColor],
-        generator: GKMersenneTwisterRandomSource
-    ) -> CGColor {
-        let idx = floor(Float(remainingColors.count) * generator.nextUniform())
-        let color = remainingColors[Int(idx)]
-        remainingColors.removeAll(where: {$0 == color})
-        return color.cgColor
-    }
+    let tx = cos(angle) * velocity
+    let ty = sin(angle) * velocity
     
-    private static func hueShift(
-        colors: [UIColor],
-        generator: GKMersenneTwisterRandomSource
-    ) -> [UIColor]{
-        var amount = (CGFloat(generator.nextInt()) * 30.0) - (wobble / 2)
-        amount = abs(amount)
-        return colors.map { $0.rotated(degrees: amount) }
-    }
+    // Third random is a shape rotation on top of all of that.
+    let secondRot = generator.nextUniform()
+    let rot = (firstRot * 360.0) + secondRot * 180.0
+    
+    let fill = generateColor(from: &remainingColors, generator: generator)
+    
+    ctx.translateBy(x: tx, y: ty)
+    ctx.rotate(by: CGFloat(rot))
+    ctx.setFillColor(fill)
+    
+    let rect = CGRect(x: 0, y: 0, width: size, height: size)
+    ctx.fill(rect)
+    
+    // finish
+    ctx.restoreGState()
+}
+
+private func generateFirstShape(
+    currentContext ctx: CGContext,
+    size: CGFloat,
+    remainingColors: inout [UIColor],
+    generator: GKMersenneTwisterRandomSource
+) {
+    // preparation
+    ctx.saveGState()
+    
+    let rect = CGRect(x: 0, y: 0, width: size, height: size)
+    ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
+    ctx.fill(rect)
+    
+    // finish
+    ctx.restoreGState()
+}
+
+private func generateColor(
+    from remainingColors: inout [UIColor],
+    generator: GKMersenneTwisterRandomSource
+) -> CGColor {
+    let idx = floor(Float(remainingColors.count) * generator.nextUniform())
+    let color = remainingColors[Int(idx)]
+    remainingColors.removeAll(where: {$0 == color})
+    return color.cgColor
+}
+
+private func hueShift(
+    colors: [UIColor],
+    generator: GKMersenneTwisterRandomSource
+) -> [UIColor]{
+    let wobble: CGFloat = 30
+    var amount = (CGFloat(generator.nextInt()) * 30.0) - (wobble / 2)
+    amount = abs(amount)
+    return colors.map { $0.rotated(degrees: amount) }
 }

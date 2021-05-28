@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func generateButtonDidTouch(_ sender: Any) {
-        let image = Jazzicon.generate(size: 200)
+        let image = Jazzicon().generateImage(size: 200)
         imageView.image = image
     }
 }
