@@ -10,14 +10,13 @@ import GameplayKit
 
 public struct Jazzicon {
     // MARK: - Constants
-    private static var wobble = 30
+    private static var wobble: CGFloat = 30
     
     /// Generate random jazzicon
     /// - Parameter size: size of the image (width = height)
     /// - Returns: an instance of UIImage
-    public static func generate(size: CGFloat, shapeCount: Int = 4) -> UIImage {
+    public static func generate(size: CGFloat, shapeCount: Int = 4, seed: UInt64 = .random(in: 0..<10000000)) -> UIImage {
         // create generator
-        let seed = UInt64.random(in: 0..<10000000)
         let generator = GKMersenneTwisterRandomSource(seed: seed)
         
         var remainingColors = hueShift(colors: UIColor.jazziconColors, generator: generator)
@@ -120,7 +119,7 @@ public struct Jazzicon {
         colors: [UIColor],
         generator: GKMersenneTwisterRandomSource
     ) -> [UIColor]{
-        var amount = (generator.nextInt() * 30) - (wobble / 2)
+        var amount = (CGFloat(generator.nextInt()) * 30.0) - (wobble / 2)
         amount = abs(amount)
         return colors.map { $0.rotated(degrees: amount) }
     }

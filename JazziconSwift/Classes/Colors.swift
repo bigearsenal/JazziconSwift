@@ -45,13 +45,14 @@ extension UIColor {
         )
     }
     
-    func rotated(degrees: Int) -> UIColor {
+    func rotated(degrees: CGFloat) -> UIColor {
         var hue = CGFloat(0)
         var saturation = CGFloat(0)
         var brightness = CGFloat(0)
         var alpha = CGFloat(0)
         self.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-        hue = fmod(hue + CGFloat(degrees)/360.0, 1.0)
+        hue = fmod(hue + degrees/360.0, 1.0)
+        if hue < 0 {hue += 1}
         return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
     }
 }
