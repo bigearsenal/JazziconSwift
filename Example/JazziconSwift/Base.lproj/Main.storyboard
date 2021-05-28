@@ -26,10 +26,19 @@
                                     <constraint firstAttribute="height" constant="200" id="bYA-NX-Cc4"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydD-MN-4gh">
+                                <rect key="frame" x="155.5" y="449.5" width="64" height="30"/>
+                                <state key="normal" title="Generate"/>
+                                <connections>
+                                    <action selector="generateButtonDidTouch:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="qhI-aO-wcb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ydD-MN-4gh" firstAttribute="top" secondItem="iWI-J0-Kfe" secondAttribute="bottom" constant="16" id="N2U-MT-r0b"/>
                             <constraint firstItem="iWI-J0-Kfe" firstAttribute="centerY" secondItem="kh9-bI-dsS" secondAttribute="centerY" id="OSW-fF-ja5"/>
+                            <constraint firstItem="ydD-MN-4gh" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="cj5-a0-9GK"/>
                             <constraint firstItem="iWI-J0-Kfe" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="yb1-fb-Eeu"/>
                         </constraints>
                     </view>
