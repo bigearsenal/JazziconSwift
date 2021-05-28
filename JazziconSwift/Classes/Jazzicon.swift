@@ -15,12 +15,12 @@ public struct Jazzicon {
     /// Generate random jazzicon
     /// - Parameter size: size of the image (width = height)
     /// - Returns: an instance of UIImage
-    public static func generate(size: CGFloat, shapeCount: Int = 8) -> UIImage {
+    public static func generate(size: CGFloat, shapeCount: Int = 4) -> UIImage {
         // create generator
         let seed = UInt64.random(in: 0..<10000000)
         let generator = GKMersenneTwisterRandomSource(seed: seed)
         
-        let remainingColors = hueShift(colors: UIColor.jazziconColors, generator: generator)
+        var remainingColors = hueShift(colors: UIColor.jazziconColors, generator: generator)
         
         // drawing
         UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
@@ -30,7 +30,7 @@ public struct Jazzicon {
         generateFirstShape(
             currentContext: ctx,
             size: size,
-            remainingColors: remainingColors,
+            remainingColors: &remainingColors,
             generator: generator
         )
         
@@ -41,7 +41,7 @@ public struct Jazzicon {
                 size: size,
                 total: shapeCount-1,
                 i: i,
-                remainingColors: remainingColors,
+                remainingColors: &remainingColors,
                 generator: generator
             )
         }
@@ -56,14 +56,14 @@ public struct Jazzicon {
     private static func generateFirstShape(
         currentContext ctx: CGContext,
         size: CGFloat,
-        remainingColors: [UIColor],
+        remainingColors: inout [UIColor],
         generator: GKMersenneTwisterRandomSource
     ) {
         // preparation
         ctx.saveGState()
         
         let rect = CGRect(x: 0, y: 0, width: size, height: size)
-        ctx.setFillColor(generateColor(from: remainingColors, generator: generator))
+        ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
         ctx.fill(rect)
         
         // finish
@@ -75,7 +75,7 @@ public struct Jazzicon {
         size: CGFloat,
         total: Int,
         i: Int,
-        remainingColors: [UIColor],
+        remainingColors: inout [UIColor],
         generator: GKMersenneTwisterRandomSource
     ) {
         // preparation
@@ -93,7 +93,7 @@ public struct Jazzicon {
         let secondRot = generator.nextUniform()
         let rot = (firstRot * 360.0) + secondRot * 180.0
         
-        let fill = generateColor(from: remainingColors, generator: generator)
+        let fill = generateColor(from: &remainingColors, generator: generator)
         
         ctx.translateBy(x: tx, y: ty)
         ctx.rotate(by: CGFloat(rot))
@@ -107,11 +107,13 @@ public struct Jazzicon {
     }
     
     private static func generateColor(
-        from remainingColors: [UIColor],
+        from remainingColors: inout [UIColor],
         generator: GKMersenneTwisterRandomSource
     ) -> CGColor {
         let idx = floor(Float(remainingColors.count) * generator.nextUniform())
-        return remainingColors[Int(idx)].cgColor
+        let color = remainingColors[Int(idx)]
+        remainingColors.removeAll(where: {$0 == color})
+        return color.cgColor
     }
     
     private static func hueShift(
