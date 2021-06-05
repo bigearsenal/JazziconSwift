@@ -11,11 +11,12 @@ import JazziconSwift
 
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var seedTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        generateButtonDidTouch(self)
+        generate()
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,8 +24,18 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func generateButtonDidTouch(_ sender: Any) {
-        let image = Jazzicon().generateImage(size: 200)
+    @IBAction func randomSeedButtonDidTouch(_ sender: Any) {
+        seedTextField.text = "\(UInt64.random(in: 0..<1000000))"
+        generate()
+    }
+    
+    @IBAction func seedDidEnter(_ sender: Any) {
+        generate()
+    }
+    
+    func generate() {
+        let seed = UInt64(seedTextField.text ?? "")
+        let image = Jazzicon(seed: seed ?? 1).generateImage(size: 200)
         imageView.image = image
     }
 }

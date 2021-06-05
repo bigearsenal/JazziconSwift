@@ -11,15 +11,12 @@ import GameplayKit
 public struct Jazzicon {
     // MARK: - Properties
     private var seed: UInt64
-    private var shapeCount: Int
     
     // MARK: - Initializers
     public init(
-        seed: UInt64 = .random(in: 0..<10000000),
-        shapeCount: Int = 4
+        seed: UInt64 = .random(in: 0..<10000000)
     ) {
         self.seed = seed
-        self.shapeCount = shapeCount
     }
     
     /// Generate random jazzicon
@@ -29,109 +26,121 @@ public struct Jazzicon {
         // create generator
         let generator = GKMersenneTwisterRandomSource(seed: seed)
         
-        var remainingColors = hueShift(colors: UIColor.jazziconColors, generator: generator)
+        var remainingColors = hueShift(colors: jazziconColorHexes, generator: generator)
         
-        // drawing
-        UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
-        let ctx = UIGraphicsGetCurrentContext()!
+        var images = [UIImage]()
         
         // first shape (without translation, rotation)
-        generateFirstShape(
-            currentContext: ctx,
+        
+        let firstImg = generateFirstShape(
             size: size,
             remainingColors: &remainingColors,
             generator: generator
         )
+        images.append(firstImg)
         
         // other shapes
+        let shapeCount = 4
         for i in 0..<shapeCount-1 {
-            generateOtherShape(
-                currentContext: ctx,
+            let nextImg = generateOtherShape(
                 size: size,
                 total: shapeCount-1,
                 i: i,
                 remainingColors: &remainingColors,
                 generator: generator
             )
+            images.append(nextImg)
         }
         
-        let img = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsBeginImageContext(.init(width: size, height: size))
+        let areaSize = CGRect(x: 0, y: 0, width: size, height: size)
+        
+        images.forEach {$0.draw(in: areaSize)}
+        
+        var newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-
-        return img
+        
+        return newImage
     }
 }
 
 // MARK: - Helpers
+private func generateFirstShape(
+    size: CGFloat,
+    remainingColors: inout [ColorHex],
+    generator: GKMersenneTwisterRandomSource
+) -> UIImage {
+    // drawing
+    UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
+    let ctx = UIGraphicsGetCurrentContext()!
+    ctx.saveGState()
+    
+    let rect = CGRect(x: 0, y: 0, width: size, height: size)
+    ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
+    ctx.fill(rect)
+    ctx.restoreGState()
+    let img = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    
+    return img
+}
+
 private func generateOtherShape(
-    currentContext ctx: CGContext,
     size: CGFloat,
     total: Int,
     i: Int,
-    remainingColors: inout [UIColor],
+    remainingColors: inout [ColorHex],
     generator: GKMersenneTwisterRandomSource
-) {
-    // preparation
-    ctx.saveGState()
-    
-//        let center = size / 2
+) -> UIImage {
     let firstRot = generator.nextUniform()
-    let angle = CGFloat.pi * 2 * CGFloat(firstRot)
-    let velocity = size / CGFloat(total) * CGFloat(generator.nextUniform()) + (CGFloat(i) * size / CGFloat(total))
+    let angle = Float.pi * 2 * Float(firstRot)
+    
+    let velocity = Float(size) / Float(total) * generator.nextUniform() + (Float(i) * Float(size) / Float(total))
     
     let tx = cos(angle) * velocity
     let ty = sin(angle) * velocity
     
     // Third random is a shape rotation on top of all of that.
     let secondRot = generator.nextUniform()
-    let rot = (firstRot * 360.0) + secondRot * 180.0
+    let rot = (firstRot * 2 * .pi) + secondRot * .pi
     
-    let fill = generateColor(from: &remainingColors, generator: generator)
-    
-    ctx.translateBy(x: tx, y: ty)
-    ctx.rotate(by: CGFloat(rot))
-    ctx.setFillColor(fill)
-    
-    let rect = CGRect(x: 0, y: 0, width: size, height: size)
-    ctx.fill(rect)
-    
-    // finish
-    ctx.restoreGState()
-}
-
-private func generateFirstShape(
-    currentContext ctx: CGContext,
-    size: CGFloat,
-    remainingColors: inout [UIColor],
-    generator: GKMersenneTwisterRandomSource
-) {
-    // preparation
+    // drawing
+    UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
+    let ctx = UIGraphicsGetCurrentContext()!
     ctx.saveGState()
     
+    let fill = generateColor(from: &remainingColors, generator: generator)
+    ctx.setFillColor(fill)
+    
+    ctx.rotate(by: -CGFloat(rot))
+    ctx.translateBy(x: -CGFloat(tx), y: -CGFloat(ty))
+    
+    // Move
     let rect = CGRect(x: 0, y: 0, width: size, height: size)
-    ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
     ctx.fill(rect)
     
-    // finish
     ctx.restoreGState()
+    let img = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    
+    return img
 }
 
 private func generateColor(
-    from remainingColors: inout [UIColor],
+    from remainingColors: inout [ColorHex],
     generator: GKMersenneTwisterRandomSource
 ) -> CGColor {
     let idx = floor(Float(remainingColors.count) * generator.nextUniform())
-    let color = remainingColors[Int(idx)]
-    remainingColors.removeAll(where: {$0 == color})
-    return color.cgColor
+    let colorHex = remainingColors[Int(idx)]
+    remainingColors.removeAll(where: {$0 == colorHex})
+    return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
 }
 
 private func hueShift(
-    colors: [UIColor],
+    colors: [ColorHex],
     generator: GKMersenneTwisterRandomSource
-) -> [UIColor]{
-    let wobble: CGFloat = 30
-    var amount = (CGFloat(generator.nextInt()) * 30.0) - (wobble / 2)
-    amount = abs(amount)
-    return colors.map { $0.rotated(degrees: amount) }
+) -> [ColorHex]{
+    let wobble: Double = 30
+    let amount = (Double(generator.nextUniform()) * 30.0) - (wobble / 2)
+    return colors.map {rotateColor($0, degrees: amount)}
 }
