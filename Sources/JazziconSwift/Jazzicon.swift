@@ -7,6 +7,7 @@
 
 import Foundation
 import GameplayKit
+import UIKit
 
 public struct Jazzicon {
     // MARK: - Properties
@@ -57,7 +58,7 @@ public struct Jazzicon {
         
         images.forEach {$0.draw(in: areaSize)}
         
-        var newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         return newImage
