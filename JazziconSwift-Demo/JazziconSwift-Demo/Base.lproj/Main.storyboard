@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HjA-Th-Sbr">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="Dcx-1v-EjQ">
+            <objects>
+                <viewController id="HjA-Th-Sbr" customClass="ViewController" customModule="JazziconSwift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lfb-Wq-RJn"/>
+                        <viewControllerLayoutGuide type="bottom" id="lIP-hR-7rk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Pzu-or-7L6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hjx-qT-lui">
+                                <rect key="frame" x="107" y="348" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Hcf-C8-WNl"/>
+                                    <constraint firstAttribute="height" constant="200" id="fhW-VK-bk8"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="maskToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fPo-sL-0HI">
+                                <rect key="frame" x="145" y="570.5" width="124.5" height="34"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="seed" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TSw-Nf-Tgf">
+                                        <rect key="frame" x="0.0" y="0.0" width="59.5" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="seedDidEnter:" destination="HjA-Th-Sbr" eventType="editingChanged" id="ijX-yx-iYQ"/>
+                                        </connections>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8e-p3-yaO">
+                                        <rect key="frame" x="67.5" y="0.0" width="57" height="34"/>
+                                        <state key="normal" title="Random"/>
+                                        <connections>
+                                            <action selector="randomSeedButtonDidTouch:" destination="HjA-Th-Sbr" eventType="touchUpInside" id="ztR-0X-DuI"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kMh-4G-XGS"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="fPo-sL-0HI" firstAttribute="centerX" secondItem="hjx-qT-lui" secondAttribute="centerX" id="6Ya-nB-Ce4"/>
+                            <constraint firstItem="fPo-sL-0HI" firstAttribute="top" secondItem="hjx-qT-lui" secondAttribute="bottom" constant="22.5" id="8hu-6b-l8t"/>
+                            <constraint firstItem="hjx-qT-lui" firstAttribute="centerY" secondItem="Pzu-or-7L6" secondAttribute="centerY" id="CtZ-c0-Hnc"/>
+                            <constraint firstItem="hjx-qT-lui" firstAttribute="centerX" secondItem="Pzu-or-7L6" secondAttribute="centerX" id="Hkm-ci-Q05"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="hjx-qT-lui" id="44R-jZ-P2i"/>
+                        <outlet property="seedTextField" destination="TSw-Nf-Tgf" id="bKW-i9-ZpL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="obs-N4-LjU" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="12" y="111.99400299850076"/>
+        </scene>
+    </scenes>
+</document>
