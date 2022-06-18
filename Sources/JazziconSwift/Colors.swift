@@ -54,13 +54,13 @@ func rotateColor(_ hex: ColorHex, degrees: Double) -> ColorHex {
 }
 
 // MARK: - Private
-private struct HSL {
+struct HSL: Equatable {
     var h: Double
     let s: Double
     let l: Double
 }
 
-private func hexToHSL(_ hex: ColorHex) -> HSL {
+func hexToHSL(_ hex: ColorHex) -> HSL {
     // Convert hex to RGB first
     var r = Double(Int(hex[1] + hex[2], radix: 16)!)
     var g = Double(Int(hex[3] + hex[4], radix: 16)!)
@@ -97,8 +97,8 @@ private func hexToHSL(_ hex: ColorHex) -> HSL {
     
     l = (cmax + cmin) / 2
     s = delta == 0 ? 0 : delta / (1 - abs(2 * l - 1))
-    s = +(s * 100).toFixed(1)
-    l = +(l * 100).toFixed(1)
+    s = +(s * 100).toFixed(0)
+    l = +(l * 100).toFixed(0)
     
     return .init(h: h, s: s, l: l)
 }

@@ -137,7 +137,7 @@ private func generateColor(
     return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
 }
 
-private func hueShift(
+func hueShift(
     colors: [ColorHex],
     generator: GKMersenneTwisterRandomSource
 ) -> [ColorHex]{
