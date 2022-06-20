@@ -6,16 +6,15 @@
 //
 
 import Foundation
-import GameplayKit
 import UIKit
 
 public struct Jazzicon {
     // MARK: - Properties
-    private var seed: UInt64
+    private var seed: UInt32
     
     // MARK: - Initializers
     public init(
-        seed: UInt64 = .random(in: 0..<10000000)
+        seed: UInt32 = .random(in: 0..<10000000)
     ) {
         self.seed = seed
     }
@@ -25,7 +24,7 @@ public struct Jazzicon {
     /// - Returns: an instance of UIImage
     public func generateImage(size: CGFloat) -> UIImage {
         // create generator
-        let generator = GKMersenneTwisterRandomSource(seed: seed)
+        let generator = Gust(seed: seed)
         
         var remainingColors = hueShift(colors: jazziconColorHexes, generator: generator)
         
@@ -69,7 +68,7 @@ public struct Jazzicon {
 private func generateFirstShape(
     size: CGFloat,
     remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> UIImage {
     // drawing
     UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
@@ -91,18 +90,18 @@ private func generateOtherShape(
     total: Int,
     i: Int,
     remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> UIImage {
-    let firstRot = generator.nextUniform()
+    let firstRot = generator.randomFloat()
     let angle = Float.pi * 2 * Float(firstRot)
     
-    let velocity = Float(size) / Float(total) * generator.nextUniform() + (Float(i) * Float(size) / Float(total))
+    let velocity = Float(size) / Float(total) * generator.randomFloat() + (Float(i) * Float(size) / Float(total))
     
     let tx = cos(angle) * velocity
     let ty = sin(angle) * velocity
     
     // Third random is a shape rotation on top of all of that.
-    let secondRot = generator.nextUniform()
+    let secondRot = generator.randomFloat()
     let rot = (firstRot * 2 * .pi) + secondRot * .pi
     
     // drawing
@@ -129,9 +128,9 @@ private func generateOtherShape(
 
 private func generateColor(
     from remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> CGColor {
-    let idx = floor(Float(remainingColors.count) * generator.nextUniform())
+    let idx = floor(Float(remainingColors.count) * generator.randomFloat())
     let colorHex = remainingColors[Int(idx)]
     remainingColors.removeAll(where: {$0 == colorHex})
     return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
@@ -139,9 +138,17 @@ private func generateColor(
 
 func hueShift(
     colors: [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> [ColorHex]{
     let wobble: Double = 30
-    let amount = (Double(generator.nextUniform()) * 30.0) - (wobble / 2)
+    let amount = (Double(generator.randomFloat()) * 30.0) - (wobble / 2)
     return colors.map {rotateColor($0, degrees: amount)}
+}
+
+
+extension Gust {
+    func randomFloat() -> Float {
+        let uint32: UInt32 = random()
+        return Float(uint32) / 4294967296.0
+    }
 }
