@@ -7,10 +7,14 @@
 //
 
 import UIKit
-import JazziconSwift
 
 class ViewController: UIViewController {
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: JazziconView! {
+        didSet {
+            imageView.layer.cornerRadius = 100
+            imageView.clipsToBounds = true
+        }
+    }
     @IBOutlet weak var seedTextField: UITextField!
     
     override func viewDidLoad() {
@@ -34,9 +38,8 @@ class ViewController: UIViewController {
     }
     
     func generate() {
-        let seed = UInt64(seedTextField.text ?? "")
-        let image = Jazzicon(seed: seed ?? 1).generateImage(size: 200)
-        imageView.image = image
+        let seed = UInt32(seedTextField.text ?? "")
+        imageView.seed = seed ?? 1
     }
 }
 

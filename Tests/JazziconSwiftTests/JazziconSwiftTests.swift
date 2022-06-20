@@ -15,6 +15,10 @@ final class JazziconSwiftTests: XCTestCase {
         XCTAssertEqual(hexToHSL("#F19E02"), .init(h: 39, s: 98, l: 48))
     }
     
+    func testHSLToHex() throws {
+        XCTAssertEqual(hslToHex(.init(h: 179.51065995311365, s: 99, l: 28)), "#018E8E")
+    }
+    
     func testMersenneTwister() throws {
         let genTest20Cases: (UInt32) -> [UInt32] = { seed in
             let source = Gust(seed: seed)

@@ -6,15 +6,14 @@
 //
 
 import Foundation
-import UIKit
+import CoreGraphics
 
 // MARK: - Internal
 typealias ColorHex = String
 
-extension UIColor {
-    convenience init?(hex: ColorHex) {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
-        
+extension CGColor {
+    public static func from(hex: String) -> CGColor? {
+        var cString = hex
         if (cString.hasPrefix("#")) {
             cString.remove(at: cString.startIndex)
         }
@@ -22,7 +21,7 @@ extension UIColor {
         var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
         
-        self.init(
+        return .init(
             red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
             green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
@@ -103,7 +102,7 @@ func hexToHSL(_ hex: ColorHex) -> HSL {
     return .init(h: h, s: s, l: l)
 }
 
-private func hslToHex(_ hsl: HSL) -> ColorHex {
+func hslToHex(_ hsl: HSL) -> ColorHex {
     let h = hsl.h
     var s = hsl.s
     var l = hsl.l

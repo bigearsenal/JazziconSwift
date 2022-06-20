@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import CoreGraphics
 
 public struct Jazzicon {
     // MARK: - Properties
@@ -22,80 +22,63 @@ public struct Jazzicon {
     /// Generate random jazzicon
     /// - Parameter size: size of the image (width = height)
     /// - Returns: an instance of UIImage
-    public func generateImage(size: CGFloat) -> UIImage {
+    public func generateImage(context: CGContext, rect: CGRect) {
         // create generator
         let generator = Gust(seed: seed)
         
         var remainingColors = hueShift(colors: jazziconColorHexes, generator: generator)
         
-        var images = [UIImage]()
-        
         // first shape (without translation, rotation)
         
-        let firstImg = generateFirstShape(
-            size: size,
+        generateFirstShape(
+            with: context,
+            in: rect,
             remainingColors: &remainingColors,
             generator: generator
         )
-        images.append(firstImg)
         
         // other shapes
+        
         let shapeCount = 4
         for i in 0..<shapeCount-1 {
-            let nextImg = generateOtherShape(
-                size: size,
+            generateOtherShape(
+                with: context,
+                in: rect,
                 total: shapeCount-1,
                 i: i,
                 remainingColors: &remainingColors,
                 generator: generator
             )
-            images.append(nextImg)
         }
-        
-        UIGraphicsBeginImageContext(.init(width: size, height: size))
-        let areaSize = CGRect(x: 0, y: 0, width: size, height: size)
-        
-        images.forEach {$0.draw(in: areaSize)}
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        return newImage
     }
 }
 
 // MARK: - Helpers
 private func generateFirstShape(
-    size: CGFloat,
+    with ctx: CGContext,
+    in rect: CGRect,
     remainingColors: inout [ColorHex],
     generator: Gust
-) -> UIImage {
+) {
     // drawing
-    UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
-    let ctx = UIGraphicsGetCurrentContext()!
     ctx.saveGState()
-    
-    let rect = CGRect(x: 0, y: 0, width: size, height: size)
     ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
     ctx.fill(rect)
     ctx.restoreGState()
-    let img = UIGraphicsGetImageFromCurrentImageContext()!
-    UIGraphicsEndImageContext()
-    
-    return img
 }
 
 private func generateOtherShape(
-    size: CGFloat,
+    with ctx: CGContext,
+    in rect: CGRect,
     total: Int,
     i: Int,
     remainingColors: inout [ColorHex],
     generator: Gust
-) -> UIImage {
+) {
     let firstRot = generator.randomDouble()
     let angle = Double.pi * 2 * Double(firstRot)
     
-    let velocity = Double(size) / Double(total) * generator.randomDouble() + (Double(i) * Double(size) / Double(total))
+    let velocity = Double(rect.width) / Double(total) * generator.randomDouble() + (Double(i) * Double(rect.width) / Double(total))
     
     let tx = cos(angle) * velocity
     let ty = sin(angle) * velocity
@@ -105,25 +88,17 @@ private func generateOtherShape(
     let rot = (firstRot * 2 * .pi) + secondRot * .pi
     
     // drawing
-    UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
-    let ctx = UIGraphicsGetCurrentContext()!
     ctx.saveGState()
     
     let fill = generateColor(from: &remainingColors, generator: generator)
     ctx.setFillColor(fill)
-    
-    ctx.rotate(by: -CGFloat(rot))
+    ctx.rotate(by: -CGFloat(rot.toFixed(1)))
     ctx.translateBy(x: -CGFloat(tx), y: -CGFloat(ty))
     
     // Move
-    let rect = CGRect(x: 0, y: 0, width: size, height: size)
     ctx.fill(rect)
     
     ctx.restoreGState()
-    let img = UIGraphicsGetImageFromCurrentImageContext()!
-    UIGraphicsEndImageContext()
-    
-    return img
 }
 
 private func generateColor(
@@ -132,8 +107,7 @@ private func generateColor(
 ) -> CGColor {
     let idx = floor(Double(remainingColors.count) * generator.randomDouble())
     let colorHex = remainingColors[Int(idx)]
-    remainingColors.removeAll(where: {$0 == colorHex})
-    return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
+    return .from(hex: colorHex)? ?? .init(gray: 0, alpha: 1)
 }
 
 func hueShift(
@@ -150,6 +124,7 @@ func hueShift(
 extension Gust {
     func randomDouble() -> Double {
         let uint32: UInt32 = random()
+        print(uint32)
         return Double(uint32) / 4294967296.0
     }
 }
