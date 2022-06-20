@@ -1,6 +1,5 @@
 import XCTest
 @testable import JazziconSwift
-import GameplayKit
 
 final class JazziconSwiftTests: XCTestCase {
     func testHexToHSL() throws {
@@ -16,12 +15,35 @@ final class JazziconSwiftTests: XCTestCase {
         XCTAssertEqual(hexToHSL("#F19E02"), .init(h: 39, s: 98, l: 48))
     }
     
+    func testMersenneTwister() throws {
+        let random = Gust(seed: 1)
+        let gen: () -> Void = {
+            let num: UInt32 = random.random()
+            print(num)
+        }
+        gen()
+//        var rand = seedRand(12344334)
+        
+        
+//        let source = GKMersenneTwisterRandomSource(seed: 12344334)
+//
+//        XCTAssertEqual(source.nextUniform(), 1993489488)
+//
+        
+//        let random = MersenneTwister(seed: 1).random()
+//        XCTAssertEqual(random, 0.4170219984371215)
+    }
+    
     func testHueShift() throws {
-        let colors = hueShift(
-            colors: jazziconColorHexes,
-            generator: GKMersenneTwisterRandomSource(seed: 1)
-        )
+//        let num = MersenneTwisterGenerator(seed: 1).next()
+//        XCTAssertEqual(num, 1791095845)
+//
+//        print(UInt32(1234123) >> 2)
+//
+//        let colors = hueShift(
+//            colors: jazziconColorHexes,
+//            generator: MersenneTwisterGenerator(seed: 1)
+//        )
         
     }
 }
-
