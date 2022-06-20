@@ -39,8 +39,9 @@ class ViewController: UIViewController {
     }
     
     func generate() {
-        let seed = UInt32(seedTextField.text ?? "")
-        imageView.seed = seed ?? 1
+        let seed = UInt64(seedTextField.text ?? "")
+        let image = Jazzicon(seed: UInt32(seed ?? 1)).generateImage(size: 200)
+        imageView.image = image
     }
 }
 
