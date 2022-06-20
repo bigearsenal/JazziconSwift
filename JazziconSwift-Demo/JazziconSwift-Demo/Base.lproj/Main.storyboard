@@ -40,7 +40,7 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gfm-Fc-Qnk" customClass="JazziconView" customModule="JazziconSwift_Demo" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gfm-Fc-Qnk" customClass="JazziconImageView" customModule="JazziconSwift">
                                 <rect key="frame" x="107" y="353" width="200" height="200"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>

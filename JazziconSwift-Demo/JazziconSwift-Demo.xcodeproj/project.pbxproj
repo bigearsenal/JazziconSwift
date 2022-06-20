@@ -17,7 +17,6 @@
 		3B059232283F80F8009C9AB0 /* JazziconSwift_DemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B059231283F80F8009C9AB0 /* JazziconSwift_DemoUITests.swift */; };
 		3B059234283F80F8009C9AB0 /* JazziconSwift_DemoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B059233283F80F8009C9AB0 /* JazziconSwift_DemoUITestsLaunchTests.swift */; };
 		3B059244283F813C009C9AB0 /* JazziconSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3B059243283F813C009C9AB0 /* JazziconSwift */; };
-		3BF19CC5286079940023DA22 /* JazziconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF19CC4286079940023DA22 /* JazziconView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +51,6 @@
 		3B059231283F80F8009C9AB0 /* JazziconSwift_DemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JazziconSwift_DemoUITests.swift; sourceTree = "<group>"; };
 		3B059233283F80F8009C9AB0 /* JazziconSwift_DemoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JazziconSwift_DemoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3B059241283F8135009C9AB0 /* JazziconSwift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = JazziconSwift; path = ..; sourceTree = "<group>"; };
-		3BF19CC4286079940023DA22 /* JazziconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JazziconView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +107,6 @@
 				3B059210283F80F7009C9AB0 /* AppDelegate.swift */,
 				3B059212283F80F7009C9AB0 /* SceneDelegate.swift */,
 				3B059214283F80F7009C9AB0 /* ViewController.swift */,
-				3BF19CC4286079940023DA22 /* JazziconView.swift */,
 				3B059216283F80F7009C9AB0 /* Main.storyboard */,
 				3B059219283F80F8009C9AB0 /* Assets.xcassets */,
 				3B05921B283F80F8009C9AB0 /* LaunchScreen.storyboard */,
@@ -284,7 +281,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BF19CC5286079940023DA22 /* JazziconView.swift in Sources */,
 				3B059215283F80F7009C9AB0 /* ViewController.swift in Sources */,
 				3B059211283F80F7009C9AB0 /* AppDelegate.swift in Sources */,
 				3B059213283F80F7009C9AB0 /* SceneDelegate.swift in Sources */,

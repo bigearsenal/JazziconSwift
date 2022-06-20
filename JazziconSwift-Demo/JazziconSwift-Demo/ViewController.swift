@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import JazziconSwift
 
 class ViewController: UIViewController {
-    @IBOutlet weak var imageView: JazziconView! {
+    @IBOutlet weak var imageView: JazziconImageView! {
         didSet {
             imageView.layer.cornerRadius = 100
             imageView.clipsToBounds = true

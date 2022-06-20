@@ -107,7 +107,7 @@ private func generateColor(
 ) -> CGColor {
     let idx = floor(Double(remainingColors.count) * generator.randomDouble())
     let colorHex = remainingColors[Int(idx)]
-    return .from(hex: colorHex)? ?? .init(gray: 0, alpha: 1)
+    return .from(hex: colorHex)? ?? CGColor(red: 1, green: 1, blue: 1, alpha: 1)
 }
 
 func hueShift(

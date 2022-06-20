@@ -1,24 +1,26 @@
-//
-//  JazziconView.swift
-//  JazziconSwift-Demo
-//
-//  Created by Chung Tran on 20/06/2022.
-//
-
 import Foundation
+#if os(iOS)
 import UIKit
-import JazziconSwift
+open class JazziconImageView: UIView {
 
-class JazziconView: UIView {
-
-    var seed: UInt32 = 1 {
+    @IBInspectable public var seed: UInt32 {
         willSet {
             setNeedsDisplay()
         }
     }
     
+    public init(frame: CGRect, seed: UInt32) {
+        self.seed = seed
+        super.init(frame: frame)
+    }
+    
+    required public init?(coder: NSCoder) {
+        self.seed = 1
+        super.init(coder: coder)
+    }
+    
     // MARK: Override Draw
-    override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         super.draw(rect)
         
         guard let context = UIGraphicsGetCurrentContext() else {
@@ -29,3 +31,4 @@ class JazziconView: UIView {
         jazzicon.generateImage(context: context, rect: rect)
     }
 }
+#endif
