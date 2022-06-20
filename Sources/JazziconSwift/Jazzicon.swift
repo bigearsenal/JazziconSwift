@@ -140,8 +140,8 @@ func hueShift(
     colors: [ColorHex],
     generator: Gust
 ) -> [ColorHex]{
-    let wobble: Double = 30
-    let amount = (Double(generator.randomFloat()) * 30.0) - (wobble / 2)
+    let wobble: Float = 30
+    let amount = (generator.randomFloat() * 30.0) - (wobble / 2)
     return colors.map {rotateColor($0, degrees: amount)}
 }
 
