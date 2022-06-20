@@ -22,7 +22,7 @@ public struct Jazzicon {
     /// Generate random jazzicon
     /// - Parameter size: size of the image (width = height)
     /// - Returns: an instance of UIImage
-    public func generateImage(context: CGContext, rect: CGRect) {
+    public func draw(with context: CGContext, in rect: CGRect) {
         // create generator
         let generator = Gust(seed: seed)
         
