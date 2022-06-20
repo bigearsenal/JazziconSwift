@@ -77,7 +77,7 @@ final internal class MersenneTwisterGenerator: IteratorProtocol {
         let UPPER_MASK: UInt32 = 0x80000000
         let LOWER_MASK: UInt32 = 0x7fffffff
         let MATRIX_A: UInt32 = 0x9908b0df
-        let mag01 = Array(repeating: 0x0, count: Int(MATRIX_A))
+        let mag01 = [0x0, MATRIX_A]
         
         if (index >= n) { /* generate N words at one time */
             var kk = 0
@@ -90,16 +90,16 @@ final internal class MersenneTwisterGenerator: IteratorProtocol {
             } while kk < n-m
             
             repeat {
-                y = (state[kk]&UPPER_MASK)|(state[kk+1]&LOWER_MASK);
+                y = (state[kk] & UPPER_MASK)|(state[kk+1] & LOWER_MASK)
                 state[kk] = state[kk+(m-n)] ^ (y >> 1) ^ UInt32(mag01[Int(y) & 0x1])
                 
                 kk += 1
             } while kk < n-1
             
-            y = (state[n-1] & UPPER_MASK)|(state[0] & LOWER_MASK);
+            y = (state[n-1] & UPPER_MASK)|(state[0] & LOWER_MASK)
             state[n-1] = state[n-1] ^ (y >> 1) ^ UInt32(mag01[Int(y) & 0x1])
 
-            index = 0;
+            index = 0
         }
     }
 

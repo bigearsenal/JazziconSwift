@@ -16,34 +16,48 @@ final class JazziconSwiftTests: XCTestCase {
     }
     
     func testMersenneTwister() throws {
-        let random = Gust(seed: 1)
-        let gen: () -> Void = {
-            let num: UInt32 = random.random()
-            print(num)
+        let source = Gust(seed: 1)
+        
+        var result = [UInt32]()
+        for _ in 0..<20 {
+            let uint32: UInt32 = source.random()
+            result.append(uint32)
         }
-        gen()
-//        var rand = seedRand(12344334)
         
-        
-//        let source = GKMersenneTwisterRandomSource(seed: 12344334)
-//
-//        XCTAssertEqual(source.nextUniform(), 1993489488)
-//
-        
-//        let random = MersenneTwister(seed: 1).random()
-//        XCTAssertEqual(random, 0.4170219984371215)
+        XCTAssertEqual(result, [
+            1791095845,
+            4282876139,
+            3093770124,
+            4005303368,
+            491263,
+            550290313,
+            1298508491,
+            4290846341,
+            630311759,
+            1013994432,
+            396591248,
+            1703301249,
+            799981516,
+            1666063943,
+            1484172013,
+            2876537340,
+            1704103302,
+            4018109721,
+            2314200242,
+            3634877716
+        ])
     }
     
     func testHueShift() throws {
-//        let num = MersenneTwisterGenerator(seed: 1).next()
-//        XCTAssertEqual(num, 1791095845)
-//
-//        print(UInt32(1234123) >> 2)
-//
-//        let colors = hueShift(
-//            colors: jazziconColorHexes,
-//            generator: MersenneTwisterGenerator(seed: 1)
-//        )
+        //        let num = MersenneTwisterGenerator(seed: 1).next()
+        //        XCTAssertEqual(num, 1791095845)
+        //
+        //        print(UInt32(1234123) >> 2)
+        //
+        //        let colors = hueShift(
+        //            colors: jazziconColorHexes,
+        //            generator: MersenneTwisterGenerator(seed: 1)
+        //        )
         
     }
 }
