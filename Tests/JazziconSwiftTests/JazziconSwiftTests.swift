@@ -37,9 +37,9 @@ final class JazziconSwiftTests: XCTestCase {
         XCTAssertEqual(genTest20Cases(74827683), [1874567590,1381319807,2452295942,413698133,2930433667,2041850130,145822294,289449903,3658892885,109263213,3827765471,3223829248,129467459,4248183330,1007513768,1421789520,2115629014,2934614723,3386829114,2101908351])
         
         // test random float
-        let genTestRandomFloat: (UInt32) -> Float = { seed in
+        let genTestRandomFloat: (UInt32) -> Double = { seed in
             let source = Gust(seed: seed)
-            return source.randomFloat()
+            return source.randomDouble()
         }
         
         XCTAssertEqual(genTestRandomFloat(1), 0.4170219984371215)

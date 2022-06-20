@@ -92,16 +92,16 @@ private func generateOtherShape(
     remainingColors: inout [ColorHex],
     generator: Gust
 ) -> UIImage {
-    let firstRot = generator.randomFloat()
-    let angle = Float.pi * 2 * Float(firstRot)
+    let firstRot = generator.randomDouble()
+    let angle = Double.pi * 2 * Double(firstRot)
     
-    let velocity = Float(size) / Float(total) * generator.randomFloat() + (Float(i) * Float(size) / Float(total))
+    let velocity = Double(size) / Double(total) * generator.randomDouble() + (Double(i) * Double(size) / Double(total))
     
     let tx = cos(angle) * velocity
     let ty = sin(angle) * velocity
     
     // Third random is a shape rotation on top of all of that.
-    let secondRot = generator.randomFloat()
+    let secondRot = generator.randomDouble()
     let rot = (firstRot * 2 * .pi) + secondRot * .pi
     
     // drawing
@@ -130,7 +130,7 @@ private func generateColor(
     from remainingColors: inout [ColorHex],
     generator: Gust
 ) -> CGColor {
-    let idx = floor(Float(remainingColors.count) * generator.randomFloat())
+    let idx = floor(Double(remainingColors.count) * generator.randomDouble())
     let colorHex = remainingColors[Int(idx)]
     remainingColors.removeAll(where: {$0 == colorHex})
     return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
@@ -140,15 +140,16 @@ func hueShift(
     colors: [ColorHex],
     generator: Gust
 ) -> [ColorHex]{
-    let wobble: Float = 30
-    let amount = (generator.randomFloat() * 30.0) - (wobble / 2)
+    let wobble: Double = 30
+    let random = generator.randomDouble()
+    let amount = (random * 30.0) - (wobble / 2)
     return colors.map {rotateColor($0, degrees: amount)}
 }
 
 
 extension Gust {
-    func randomFloat() -> Float {
+    func randomDouble() -> Double {
         let uint32: UInt32 = random()
-        return Float(uint32) / 4294967296.0
+        return Double(uint32) / 4294967296.0
     }
 }
