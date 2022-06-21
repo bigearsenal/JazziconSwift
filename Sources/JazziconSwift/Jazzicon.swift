@@ -120,7 +120,6 @@ func hueShift(
     return colors.map {rotateColor($0, degrees: amount)}
 }
 
-
 extension Gust {
     func randomDouble() -> Double {
         let uint32: UInt32 = random()
