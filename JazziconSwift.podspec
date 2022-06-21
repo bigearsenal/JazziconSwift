@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JazziconSwift'
-  s.version          = '1.0.1'
+  s.version          = '1.1.0'
   s.summary          = 'Jazzy Identicons written in pure swift.'
 
   s.description      = <<-DESC
@@ -22,7 +22,11 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/bigearsenal/JazziconSwift.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/bigearsenal'
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
+  s.macos.deployment_target = '10.10'
+  s.tvos.deployment_target = '13.0'
+  s.watchos.deployment_target = '6.0'
+  
   s.swift_version = '5.0'
   s.source_files = 'Sources/JazziconSwift/**/*'
   
