@@ -4,18 +4,16 @@
 //
 //  Created by Chung Tran on 28/05/2021.
 //
-
 import Foundation
-import GameplayKit
 import UIKit
 
 public struct Jazzicon {
     // MARK: - Properties
-    private var seed: UInt64
+    private var seed: UInt32
     
     // MARK: - Initializers
     public init(
-        seed: UInt64 = .random(in: 0..<10000000)
+        seed: UInt32 = .random(in: 0..<10000000)
     ) {
         self.seed = seed
     }
@@ -25,9 +23,9 @@ public struct Jazzicon {
     /// - Returns: an instance of UIImage
     public func generateImage(size: CGFloat) -> UIImage {
         // create generator
-        let generator = GKMersenneTwisterRandomSource(seed: seed)
-        
-        var remainingColors = hueShift(colors: jazziconColorHexes, generator: generator)
+        let generator = Gust(seed: seed)
+
+        var remainingColors = hueShift(colors: jazziconColorHexes, rand: generator.randomFloat())
         
         var images = [UIImage]()
         
@@ -43,6 +41,7 @@ public struct Jazzicon {
         // other shapes
         let shapeCount = 4
         for i in 0..<shapeCount-1 {
+
             let nextImg = generateOtherShape(
                 size: size,
                 total: shapeCount-1,
@@ -69,14 +68,15 @@ public struct Jazzicon {
 private func generateFirstShape(
     size: CGFloat,
     remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> UIImage {
     // drawing
     UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
     let ctx = UIGraphicsGetCurrentContext()!
     ctx.saveGState()
-    
+
     let rect = CGRect(x: 0, y: 0, width: size, height: size)
+    
     ctx.setFillColor(generateColor(from: &remainingColors, generator: generator))
     ctx.fill(rect)
     ctx.restoreGState()
@@ -91,20 +91,24 @@ private func generateOtherShape(
     total: Int,
     i: Int,
     remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> UIImage {
-    let firstRot = generator.nextUniform()
+    let firstRot: Float = generator.randomFloat()
     let angle = Float.pi * 2 * Float(firstRot)
+
+    let f = Float(size) / Float(total) * generator.randomFloat()
+    let s = (Float(i) * Float(size) / Float(total))
+    let velocity = f + s
     
-    let velocity = Float(size) / Float(total) * generator.nextUniform() + (Float(i) * Float(size) / Float(total))
-    
+    //1
     let tx = cos(angle) * velocity
     let ty = sin(angle) * velocity
-    
+        
     // Third random is a shape rotation on top of all of that.
-    let secondRot = generator.nextUniform()
-    let rot = (firstRot * 2 * .pi) + secondRot * .pi
-    
+    let secondRot: Float = generator.randomFloat()
+
+    let rot = ((firstRot * 360)) + (secondRot * 180)
+
     // drawing
     UIGraphicsBeginImageContextWithOptions(.init(width: size, height: size), false, 0)
     let ctx = UIGraphicsGetCurrentContext()!
@@ -113,13 +117,15 @@ private func generateOtherShape(
     let fill = generateColor(from: &remainingColors, generator: generator)
     ctx.setFillColor(fill)
     
-    ctx.rotate(by: -CGFloat(rot))
-    ctx.translateBy(x: -CGFloat(tx), y: -CGFloat(ty))
+    ctx.translateBy(x: CGFloat(tx), y: CGFloat(ty))
     
+    ctx.translateBy(x: CGFloat(size/2), y: CGFloat(size/2))
+    ctx.rotate(by: CGFloat(rot) * CGFloat(Double.pi / 180))
+
     // Move
-    let rect = CGRect(x: 0, y: 0, width: size, height: size)
+    let rect = CGRect(x: -size/2, y: -size/2, width: size, height: size)
     ctx.fill(rect)
-    
+//
     ctx.restoreGState()
     let img = UIGraphicsGetImageFromCurrentImageContext()!
     UIGraphicsEndImageContext()
@@ -129,19 +135,31 @@ private func generateOtherShape(
 
 private func generateColor(
     from remainingColors: inout [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    generator: Gust
 ) -> CGColor {
-    let idx = floor(Float(remainingColors.count) * generator.nextUniform())
+    // Temp bug fix to get correct numbers generated
+    generator.randomFloat()
+    let r = generator.randomFloat()
+    let idx = floor(Float(remainingColors.count) * r)
     let colorHex = remainingColors[Int(idx)]
     remainingColors.removeAll(where: {$0 == colorHex})
     return UIColor(hex: colorHex)?.cgColor ?? UIColor.white.cgColor
 }
 
-private func hueShift(
+func hueShift(
     colors: [ColorHex],
-    generator: GKMersenneTwisterRandomSource
+    rand: Float
 ) -> [ColorHex]{
-    let wobble: Double = 30
-    let amount = (Double(generator.nextUniform()) * 30.0) - (wobble / 2)
-    return colors.map {rotateColor($0, degrees: amount)}
+    let wobble: Float = 30
+    let rand: Float = rand
+    let amount = (rand * 30.0) - (wobble / 2)
+    return colors.map {rotateColor($0, degrees: Float(amount))}
+}
+
+
+extension Gust {
+    func randomFloat() -> Float {
+        let uint32: UInt32 = random()
+        return Float(uint32) * (1.0/4294967296.0)
+    }
 }

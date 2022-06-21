@@ -46,7 +46,7 @@ var jazziconColorHexes: [ColorHex] {
     ]
 }
 
-func rotateColor(_ hex: ColorHex, degrees: Double) -> ColorHex {
+func rotateColor(_ hex: ColorHex, degrees: Float) -> ColorHex {
     var hsl = hexToHSL(hex)
     hsl.h = (hsl.h + degrees).truncatingRemainder(dividingBy: 360)
     hsl.h = hsl.h < 0 ? 360 + hsl.h: hsl.h
@@ -54,17 +54,17 @@ func rotateColor(_ hex: ColorHex, degrees: Double) -> ColorHex {
 }
 
 // MARK: - Private
-private struct HSL {
-    var h: Double
-    let s: Double
-    let l: Double
+struct HSL: Equatable {
+    var h: Float
+    let s: Float
+    let l: Float
 }
 
-private func hexToHSL(_ hex: ColorHex) -> HSL {
+func hexToHSL(_ hex: ColorHex) -> HSL {
     // Convert hex to RGB first
-    var r = Double(Int(hex[1] + hex[2], radix: 16)!)
-    var g = Double(Int(hex[3] + hex[4], radix: 16)!)
-    var b = Double(Int(hex[5] + hex[6], radix: 16)!)
+    var r = Float(Int(hex[1] + hex[2], radix: 16)!)
+    var g = Float(Int(hex[3] + hex[4], radix: 16)!)
+    var b = Float(Int(hex[5] + hex[6], radix: 16)!)
     
     // Then to HSL
     r /= 255.0
@@ -75,9 +75,9 @@ private func hexToHSL(_ hex: ColorHex) -> HSL {
     let cmax = Swift.max(r, g, b)
     let delta = cmax - cmin
     
-    var h: Double = 0
-    var s: Double = 0
-    var l: Double = 0
+    var h: Float = 0
+    var s: Float = 0
+    var l: Float = 0
     
     if delta == 0 {
         h = 0
@@ -97,8 +97,8 @@ private func hexToHSL(_ hex: ColorHex) -> HSL {
     
     l = (cmax + cmin) / 2
     s = delta == 0 ? 0 : delta / (1 - abs(2 * l - 1))
-    s = +(s * 100).toFixed(1)
-    l = +(l * 100).toFixed(1)
+    s = +(s * 100).toFixed(0)
+    l = +(l * 100).toFixed(0)
     
     return .init(h: h, s: s, l: l)
 }
@@ -114,9 +114,9 @@ private func hslToHex(_ hsl: HSL) -> ColorHex {
     let c = (1 - abs(2 * l - 1)) * s
     let x = c * (1 - abs((h / 60).truncatingRemainder(dividingBy: 2) - 1))
     let m = l - c / 2
-    var r = 0.0
-    var g = 0.0
-    var b = 0.0
+    var r: Float = 0.0
+    var g: Float = 0.0
+    var b: Float = 0.0
     
     if (0 <= h && h < 60) {
         r = c; g = x; b = 0;
@@ -153,7 +153,7 @@ private func hslToHex(_ hsl: HSL) -> ColorHex {
     return "#" + rStr + gStr + bStr
 }
 
-private extension Double {
+private extension Float {
     func toBase16() -> String {
         String(Int(self.rounded()), radix: 16, uppercase: true)
     }
@@ -186,10 +186,10 @@ private extension String {
     }
 }
 
-extension Double {
-    /// Rounds the double to decimal places value
-    func toFixed(_ places:Int) -> Double {
-        let divisor = pow(10.0, Double(places))
+extension Float {
+    /// Rounds the float to decimal places value
+    func toFixed(_ places:Int) -> Float {
+        let divisor = pow(10.0, Float(places))
         return (self * divisor).rounded() / divisor
     }
 }
