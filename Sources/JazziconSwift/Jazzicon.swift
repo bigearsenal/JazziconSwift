@@ -138,7 +138,6 @@ func hueShift(
     return colors.map {rotateColor($0, degrees: Float(amount))}
 }
 
-
 extension Gust {
     func randomFloat() -> Float {
         let uint32: UInt32 = random()
