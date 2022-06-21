@@ -49,8 +49,8 @@ final class JazziconSwiftTests: XCTestCase {
     
     func testHueShift() throws {
         let genTest: (UInt32) -> [String] = { seed in
-            let generator = Gust(seed: seed)
-            return hueShift(colors: jazziconColorHexes, generator: generator)
+            let rand = Gust(seed: seed).randomFloat()
+            return hueShift(colors: jazziconColorHexes, rand: rand)
         }
         
         XCTAssertEqual(genTest(1), ["#018E8E","#03535E","#18A2F2","#236CE1","#C81453","#F29602","#F5BC00","#F93701","#FA6C00","#FB1868"])

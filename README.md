@@ -24,6 +24,26 @@ it, simply add the following line to your Podfile:
 pod 'JazziconSwift'
 ```
 
+## Usage
+### iOS
+```swift
+let imageView = JazziconImageView(frame: ..., seed: 1324)
+
+// or draw by yourself in draw(rect:) method
+open class CustomView: UIView {
+    open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        
+        let jazzicon = Jazzicon(seed: seed)
+        jazzicon.generateImage(context: context, rect: rect)
+    }
+}
+```
+
 ## Author
 
 Chung Tran, bigearsenal@gmail.com
