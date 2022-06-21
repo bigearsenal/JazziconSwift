@@ -4,13 +4,14 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="Dcx-1v-EjQ">
             <objects>
-                <viewController id="HjA-Th-Sbr" customClass="ViewController" customModule="JazziconSwift_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HjA-Th-Sbr" customClass="ViewController" customModule="JazziconSwift_Demo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lfb-Wq-RJn"/>
                         <viewControllerLayoutGuide type="bottom" id="lIP-hR-7rk"/>
@@ -19,19 +20,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hjx-qT-lui">
-                                <rect key="frame" x="107" y="348" width="200" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="Hcf-C8-WNl"/>
-                                    <constraint firstAttribute="height" constant="200" id="fhW-VK-bk8"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="maskToBounds" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="100"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fPo-sL-0HI">
                                 <rect key="frame" x="145" y="570.5" width="124.5" height="34"/>
                                 <subviews>
@@ -52,18 +40,35 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gIn-hy-aRf" customClass="JazziconImageView" customModule="JazziconSwift">
+                                <rect key="frame" x="107" y="353" width="200" height="200"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="LDH-19-FEx"/>
+                                    <constraint firstAttribute="height" constant="200" id="mNN-ow-yQg"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="seed">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kMh-4G-XGS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fPo-sL-0HI" firstAttribute="centerX" secondItem="hjx-qT-lui" secondAttribute="centerX" id="6Ya-nB-Ce4"/>
-                            <constraint firstItem="fPo-sL-0HI" firstAttribute="top" secondItem="hjx-qT-lui" secondAttribute="bottom" constant="22.5" id="8hu-6b-l8t"/>
-                            <constraint firstItem="hjx-qT-lui" firstAttribute="centerY" secondItem="Pzu-or-7L6" secondAttribute="centerY" id="CtZ-c0-Hnc"/>
-                            <constraint firstItem="hjx-qT-lui" firstAttribute="centerX" secondItem="Pzu-or-7L6" secondAttribute="centerX" id="Hkm-ci-Q05"/>
+                            <constraint firstItem="fPo-sL-0HI" firstAttribute="centerX" secondItem="kMh-4G-XGS" secondAttribute="centerX" id="L7H-Eo-Mjr"/>
+                            <constraint firstItem="gIn-hy-aRf" firstAttribute="centerY" secondItem="kMh-4G-XGS" secondAttribute="centerY" id="ST5-67-KFV"/>
+                            <constraint firstItem="gIn-hy-aRf" firstAttribute="centerX" secondItem="kMh-4G-XGS" secondAttribute="centerX" id="lKE-ZU-MGI"/>
+                            <constraint firstItem="fPo-sL-0HI" firstAttribute="top" secondItem="gIn-hy-aRf" secondAttribute="bottom" constant="17.5" id="wxa-BA-Nxq"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="hjx-qT-lui" id="44R-jZ-P2i"/>
+                        <outlet property="imageView" destination="gIn-hy-aRf" id="eoR-NL-KmP"/>
                         <outlet property="seedTextField" destination="TSw-Nf-Tgf" id="bKW-i9-ZpL"/>
                     </connections>
                 </viewController>
@@ -72,4 +77,9 @@
             <point key="canvasLocation" x="12" y="111.99400299850076"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

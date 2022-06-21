@@ -6,13 +6,13 @@
 //
 
 import Foundation
-import UIKit
+import CoreGraphics
 
 // MARK: - Internal
 typealias ColorHex = String
 
-extension UIColor {
-    convenience init?(hex: ColorHex) {
+extension CGColor {
+    static func from(hex: ColorHex) -> CGColor {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
         if (cString.hasPrefix("#")) {
@@ -22,7 +22,7 @@ extension UIColor {
         var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
         
-        self.init(
+        return CGColor(
             red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
             green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
