@@ -39,7 +39,7 @@ open class CustomView: UIView {
         }
         
         let jazzicon = Jazzicon(seed: seed)
-        jazzicon.generateImage(context: context, rect: rect)
+        jazzicon.draw(with: context, in: rect)
     }
 }
 ```
